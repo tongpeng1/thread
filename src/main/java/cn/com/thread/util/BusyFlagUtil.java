@@ -4,11 +4,11 @@ public class BusyFlagUtil {
 
     protected Thread busyFalg = null;
     protected int busyCount = 0;
-    //等待锁被释放
-    public void getBusyFlag(){
-        while(tryGetBusyFlag() == false){
+    //等待同步锁被释放
+    public synchronized void  getBusyFlag(){
+        if(tryGetBusyFlag() == false){
             try {
-                Thread.sleep(100);
+                wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -28,9 +28,25 @@ public class BusyFlagUtil {
         }
         return false;
     }
+
+    public synchronized void freeBusyFlag(){
+        if(getBusyFlagOwner() == Thread.currentThread()){
+            busyCount--;
+            if(busyCount == 0){
+                busyFalg = null;
+                notify();
+            }
+        }
+    }
+
     //获取当前线程对象
     public synchronized Thread getBusyFlagOwner(){
         return busyFalg;
     }
 
+    public static void main(String args[]){
+        BusyFlagUtil busyFlagUtil = new BusyFlagUtil();
+        //System.out.println(busyFlagUtil.tryGetBusyFlag());
+        System.out.println(busyFlagUtil.getBusyFlagOwner());
+    }
 }
