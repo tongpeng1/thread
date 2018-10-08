@@ -5,6 +5,7 @@ import cn.com.thread.service.ProductService;
 import cn.com.thread.util.ReturnMessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -39,4 +40,17 @@ public class ProductController {
         return map;
     }
 
+    /**
+     *  购买商品
+     * @param number 购买数量
+     * @param productId 购买商品Id
+     * @return
+     */
+    @RequestMapping("/buyGood")
+    public String buyGood(@RequestParam int number, @RequestParam String productId){
+
+        String message = productService.bugGoods(number,productId);
+
+        return message;
+    }
 }
