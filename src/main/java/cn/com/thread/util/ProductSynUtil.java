@@ -20,8 +20,10 @@ public class ProductSynUtil  {
         try {
             Thread.sleep(100);
             total = Integer.parseInt(productRepository.findProductNumById(productId));
-            total -= number;
-            Thread.sleep(100);
+            if(total >= number){
+                total -= number;
+                Thread.sleep(100);
+            }
             int count = productRepository.updateProductNumById(productId, String.valueOf(total));
             System.out.println(Thread.currentThread().getName()+"购买结束,数量为："+number+",剩余数量为："+total);
         } catch (InterruptedException e) {
